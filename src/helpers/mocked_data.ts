@@ -25,6 +25,7 @@ interface Meetup {
   id: number;
   title: string;
   owner_id: number;
+  cover_image_url: string;
   summary: string;
   started_at: Date;
   ended_at?: Date;
@@ -42,6 +43,14 @@ interface Application {
   created_at: Date;
 }
 
+const COVER_IMAGE_URLS = [
+  "https://scontent-hkg3-1.cdninstagram.com/t51.2885-15/e35/21373777_265951770560950_4807312218162987008_n.jpg",
+  "https://scontent-hkg3-1.cdninstagram.com/t51.2885-15/e35/21372489_1542726739104056_5041615435917688832_n.jpg",
+  "https://scontent-hkg3-1.cdninstagram.com/t51.2885-15/e35/21435661_116842598959858_8392253954787901440_n.jpg",
+  "https://scontent-hkg3-1.cdninstagram.com/t51.2885-15/e35/21480503_117076612328817_8707513663939936256_n.jpg",
+  "https://scontent-hkg3-1.cdninstagram.com/t51.2885-15/e35/21372027_122381895164827_5593194167070097408_n.jpg",
+]
+
 export class MockedDataFactory {
   public static meetup(): Meetup {
     const startedAt = Math.max(1504969200000, Math.random() * 1514732399000);
@@ -51,6 +60,7 @@ export class MockedDataFactory {
       id: faker.random.number(),
       title: faker.lorem.sentence(),
       owner_id: faker.random.number(),
+      cover_image_url: faker.random.arrayElement<string>(COVER_IMAGE_URLS),
       summary: faker.lorem.paragraph(),
       started_at: new Date(startedAt),
       ended_at: new Date(endedAt),
