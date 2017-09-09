@@ -14,6 +14,7 @@ enum ApplicationState {
 
 interface User {
   id: number;
+  display_name: string;
   email: string;
   phone: string;
   created_at: Date;
@@ -68,6 +69,7 @@ export class MockedDataFactory {
   public static user(): User {
     return {
       id: faker.random.number(),
+      display_name: faker.internet.userName(),
       email: faker.internet.email(),
       phone: faker.phone.phoneNumber(),
       created_at: new Date(),
