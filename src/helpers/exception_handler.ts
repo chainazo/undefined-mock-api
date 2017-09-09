@@ -1,8 +1,6 @@
 import * as Joi from "joi";
 import { RoutingContext } from "vingle-corgi";
 
-import { injectCORSHeaders } from "./cors";
-
 export async function exceptionHandler(this: RoutingContext, error: Error) {
   if (error.name === "ValidationError") {
     const validationError = error as Joi.ValidationError;
@@ -13,9 +11,7 @@ export async function exceptionHandler(this: RoutingContext, error: Error) {
         message: validationError.message,
         details: validationError.details,
       },
-    }, 400, {
-      ...injectCORSHeaders(this),
-    });
+    }, 400);
   }
 
   return this.json({

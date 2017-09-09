@@ -1,8 +1,7 @@
 import * as faker from "faker";
 import * as Joi from "joi";
 import { Namespace, Parameter, Route, RoutingContext } from "vingle-corgi";
-import { injectCORSHeaders } from "../../helpers/cors";
-import { exceptionHandler } from "../../helpers/expcetion_handler";
+import { exceptionHandler } from "../../helpers/exception_handler";
 import { MockedDataFactory } from "../../helpers/mocked_data";
 
 enum ChoiceType {
@@ -20,19 +19,6 @@ enum ReservationState {
 export const route = new Namespace("/meetups", {
   exceptionHandler,
   children: [
-    Route.OPTIONS(
-    "",
-    "CORS Pre-Flight Request", {},
-    async function() {
-      return {
-        statusCode: 200,
-        headers: {
-          "Content-Type": "text/plain; charset=UTF-8",
-          ...injectCORSHeaders(this),
-        },
-        body: "",
-      };
-    }),
     Route.GET(
     "", "List of meetups",
     {
@@ -69,7 +55,7 @@ export const route = new Namespace("/meetups", {
             created_at: new Date(),
             updated_at: new Date(),
           },
-        }, 200, { ...injectCORSHeaders(this) });
+        });
     }),
     new Namespace("/:meetupId", {
       params: {
@@ -86,7 +72,7 @@ export const route = new Namespace("/meetups", {
               ...MockedDataFactory.meetup(),
               id: meetupId,
             },
-          }, 200, { ...injectCORSHeaders(this) });
+          });
         }),
         Route.GET("/attendees", "List attendees of given meetup id", {
           state: Parameter.Query(Joi.allow([
@@ -97,7 +83,7 @@ export const route = new Namespace("/meetups", {
         }, async function() {
           return this.json({
             data: Array.from(new Array(10)).map(() => MockedDataFactory.user()),
-          }, 200, { ...injectCORSHeaders(this) });
+          });
         }),
         Route.POST("/approve", "Approve reservation of given user ids", {
           users: Parameter.Body(Joi.array().items(Joi.number().required())),
